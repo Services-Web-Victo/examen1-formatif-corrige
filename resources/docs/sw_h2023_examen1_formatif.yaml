@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Examen 01 Formatif
+  description: API de gestion d'une liste de films et séries présentés sur Netflix. Réalisé dans le cadre du cours Services Web au Cégep de Victoriaville.
+  
+servers: 
+  - url: http://sw_exam1_formatif.loc
+paths:
+  /:
+    get:
+      tags:
+        - Général
+      summary: Message de bienvenue
+      responses:
+        '200': 
+          description: Un petit message de bienvenue
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                    message : 'Services Web H2023 - Examen 01 - Formatif'
+  
+  /genres:
+    get:
+      tags:
+        - Genre
+      summary: Affiche la liste de tous les genres.
+
+      responses:
+        '200': 
+          description: Un tableau de tous les genres
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example: [Action & Adventure, Documentaries, Sci-Fi & Fantasy]
+
+  /titres:
+    get:
+      tags:
+        - Titres
+      summary: Affiche la liste de tous les titres divisée en page.
+      parameters:
+        - in: query
+          name: filtre
+          schema:
+            type: string
+            enum: [films, series]
+            example: films
+          required: false
+          description: Une valeur pour filtrer par le type de titres
+        - in: query
+          name: page
+          required: false
+          description: Le numéro de la page à afficher, si omis la page 1 sera affichée
+          schema:
+            type: integer
+            example: 1
+
+      responses:
+        '200': 
+          description: Un tableau de livres
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  movies:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        show_id:
+                          type: integer
+                        title:
+                          type: string
+                      example:
+                        show_id: 2328
+                        title: Dark
+                  filtre:
+                    type: string
+                    example: TV Show
+                  page:
+                    type: integer
+                    example: 1
+                  pages_totales:
+                    type: integer
+                    example: 134
